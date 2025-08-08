@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edit Produk</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      background: linear-gradient(135deg, #121212, #1e1e2f);
+      color: #eee;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      padding: 40px 0;
+    }
+    .card {
+      background-color: #24243e;
+      border: none;
+      box-shadow: 0 8px 20px rgb(0 0 0 / 0.5);
+      border-radius: 12px;
+      color: #eee;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #ccc;
+    }
+    input.form-control,
+    textarea.form-control {
+      background-color: #1b1b2f;
+      border: 1px solid #444466;
+      color: #eee;
+    }
+    input.form-control:focus,
+    textarea.form-control:focus {
+      background-color: #272746;
+      border-color: #6655ff;
+      box-shadow: 0 0 6px #6655ffaa;
+      color: #fff;
+    }
+    .btn-success {
+      background-color: #6655ff;
+      border: none;
+      box-shadow: 0 4px 12px #6655ff99;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    .btn-success:hover {
+      background-color: #574bcc;
+    }
+    .btn-warning {
+      background-color: #ffaa00;
+      border: none;
+      box-shadow: 0 4px 12px #ffaa0099;
+      font-weight: 600;
+      color: #222;
+      transition: background-color 0.3s ease;
+    }
+    .btn-warning:hover {
+      background-color: #cc8800;
+      color: #fff;
+    }
+    img.rounded.shadow-sm.border {
+      border-color: #6655ff;
+    }
+    .text-center h3 {
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    .text-muted {
+      color: #999 !important;
+    }
+    .alert-danger {
+      background-color: #8b0000a8;
+      color: #ffdddd;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="text-center mb-4">
+          <h3>Edit Produk</h3>
+          <p class="text-muted">Perbarui informasi produk di bawah ini</p>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <form
+              action="{{ route('products.update', $product->id) }}"
+              method="POST"
+              enctype="multipart/form-data"
+            >
+              @csrf
+              @method('PUT')
+
+              <!-- Upload Gambar -->
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Upload Gambar Baru</label>
+                <input
+                  type="file"
+                  name="image"
+                  class="form-control @error('image') is-invalid @enderror"
+                />
+                @if($product->image)
+                <div class="mt-3 text-center">
+                  <p class="mb-1">Gambar Saat Ini:</p>
+                  <img
+                    src="{{ asset('storage/products/' . $product->image) }}"
+                    alt="Current Image"
+                    style="width: 150px"
+                    class="rounded shadow-sm border"
+                  />
+                </div>
+                @endif
+                @error('image')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+              </div>
+
+              <!-- Judul -->
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Judul</label>
+                <input
+                  type="text"
+                  name="title"
+                  value="{{ old('title', $product->title) }}"
+                  class="form-control @error('title') is-invalid @enderror"
+                />
+                @error('title')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+              </div>
+
+              <!-- Harga -->
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Harga</label>
+                <input
+                  type="number"
+                  name="price"
+                  value="{{ old('price', $product->price) }}"
+                  class="form-control @error('price') is-invalid @enderror"
+                />
+                @error('price')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+              </div>
+
+              <!-- Stok -->
+              <div class="form-group mb-3">
+                <label class="form-label fw-bold">Stok</label>
+                <input
+                  type="number"
+                  name="stock"
+                  value="{{ old('stock', $product->stock) }}"
+                  class="form-control @error('stock') is-invalid @enderror"
+                />
+                @error('stock')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+              </div>
+
+              <!-- Deskripsi -->
+              <div class="form-group mb-4">
+                <label class="form-label fw-bold">Deskripsi Produk</label>
+                <textarea
+                  name="description"
+                  rows="5"
+                  class="form-control @error('description') is-invalid @enderror"
+                  >{{ old('description', $product->description) }}</textarea
+                >
+                @error('description')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+              </div>
+
+              <!-- Tombol -->
+              <div class="d-flex justify-content-start">
+                <button type="submit" class="btn btn-success me-3">Update</button>
+                <a href="{{ route('products.index') }}" class="btn btn-warning"
+                  >Batal</a
+                >
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Bootstrap & CKEditor -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+  <script>
+    CKEDITOR.replace('description', {
+      height: 150,
+      uiColor: '#272746',
+      contentsCss: [
+        'body {color:#eee; background-color:#1b1b2f; font-family: Poppins, sans-serif;}',
+      ],
+    });
+  </script>
+</body>
+</html>
